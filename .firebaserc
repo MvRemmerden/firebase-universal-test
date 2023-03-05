@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "firebase-universal-test": {
+      "hosting": {
+        "firebase-universal-test": [
+          "fir-universal-test"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "firebase-universal-test"
+  }
+}

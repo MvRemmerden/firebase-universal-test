@@ -1,0 +1,231 @@
+<div
+  class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+>
+  <div class="w-full max-w-md">
+    <div>
+      <img
+        class="h-12 w-auto"
+        src="https://tailwindui.com/img/logos/mark.svg?color=neutral&shade=200"
+        alt="Your Company"
+      />
+      <div *ngIf="type === 'signup'">
+        <h2 class="mt-3 mb-1 text-3xl font-bold tracking-tight">Sign up</h2>
+        <span class="text-sm text-neutral-500 dark:text-neutral-400"
+          >Already have an account?
+        </span>
+        <button
+          id="login-button"
+          class="cursor-pointer text-sm font-medium text-blue-400"
+          (click)="changeType('login')"
+        >
+          Log in
+        </button>
+      </div>
+
+      <div *ngIf="type === 'login'">
+        <h2 class="mt-3 mb-1 text-3xl font-bold tracking-tight">Log in</h2>
+        <span class="text-sm text-neutral-500 dark:text-neutral-400"
+          >New to podswarm?
+        </span>
+        <button
+          id="signup-button"
+          class="cursor-pointer text-sm font-medium text-blue-400"
+          (click)="changeType('signup')"
+        >
+          Sign up
+        </button>
+      </div>
+
+      <div *ngIf="type === 'password-reset'">
+        <h2 class="mt-3 mb-1 text-3xl font-bold tracking-tight">
+          Reset your password
+        </h2>
+      </div>
+    </div>
+    <div *ngIf="type !== 'password-reset'">
+      <button
+        class="mt-8 flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-opacity-10"
+        [disabled]="loading"
+        (click)="signInGoogle()"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 45 45"
+          fill="none"
+          class="mr-3"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M43.2857 23.1363C43.2857 21.5924 43.1471 20.1079 42.8898 18.6827H22.3839V27.1048H34.1015C33.5968 29.8264 32.0628 32.1323 29.7569 33.6762V39.1392H36.7934C40.9105 35.3488 43.2857 29.767 43.2857 23.1363Z"
+            fill="#4285F4"
+          ></path>
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M22.3839 44.4142C28.2625 44.4142 33.191 42.4645 36.7934 39.1392L29.7569 33.6763C27.8072 34.9826 25.3133 35.7546 22.3839 35.7546C16.713 35.7546 11.9131 31.9245 10.201 26.7783H2.92695V32.4194C6.50955 39.5351 13.8727 44.4142 22.3839 44.4142Z"
+            fill="#34A853"
+          ></path>
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M10.201 26.7782C9.76556 25.4719 9.51814 24.0764 9.51814 22.6414C9.51814 21.2064 9.76556 19.8109 10.201 18.5046V12.8635H2.92694C1.45233 15.8028 0.611115 19.1281 0.611115 22.6414C0.611115 26.1547 1.45233 29.48 2.92694 32.4193L10.201 26.7782Z"
+            fill="#FBBC05"
+          ></path>
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M22.3839 9.52826C25.5805 9.52826 28.4505 10.6268 30.707 12.7843L36.9518 6.53946C33.1811 3.02613 28.2526 0.868652 22.3839 0.868652C13.8727 0.868652 6.50955 5.74772 2.92695 12.8634L10.201 18.5046C11.9131 13.3583 16.713 9.52826 22.3839 9.52826Z"
+            fill="#EA4335"
+          ></path>
+        </svg>
+        Sign in with Google
+      </button>
+      <div
+        class="my-8 flex items-center gap-4 text-sm font-light text-gray-500 before:h-px before:flex-1 before:bg-gray-300 before:content-[''] after:h-px after:flex-1 after:bg-gray-300 after:content-[''] dark:before:bg-neutral-800 dark:after:bg-neutral-800"
+      >
+        or
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input type="hidden" name="remember" value="true" />
+      <div class="mb-4">
+        <label class="text-sm font-medium" for="email-address"
+          >Email address</label
+        >
+        <input
+          id="email-address"
+          formControlName="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          class="relative block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-none dark:bg-zinc-800 dark:text-gray-200 sm:text-sm"
+          [ngClass]="
+            email?.touched && email?.invalid && firstSubmitted
+              ? 'border-red-700'
+              : 'border-gray-300'
+          "
+        />
+        <div
+          *ngIf="email?.touched && email?.invalid && firstSubmitted"
+          class="text-sm text-red-500"
+        >
+          You must enter a valid email address
+        </div>
+      </div>
+      <div *ngIf="type !== 'password-reset'">
+        <label class="text-sm font-medium" for="password">Password</label>
+        <input
+          id="password"
+          formControlName="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          class="relative block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-none dark:bg-zinc-800 dark:text-gray-200 sm:text-sm"
+          [ngClass]="
+            password?.touched && password?.invalid && firstSubmitted
+              ? 'border-red-700'
+              : 'border-gray-300'
+          "
+        />
+        <div
+          *ngIf="password?.touched && password?.invalid && firstSubmitted"
+          class="text-sm text-red-500"
+        >
+          Password must be at least 6 characters long
+        </div>
+
+        <div *ngIf="type === 'login'" class="flex items-center justify-between">
+          <div
+            id="password-button"
+            class="mt-2 cursor-pointer text-sm text-neutral-500 dark:text-neutral-400"
+            (click)="changeType('password-reset')"
+          >
+            Forgot your password?
+          </div>
+        </div>
+        <div *ngIf="type === 'signup'" class="mt-4">
+          <label class="text-sm font-medium" for="name">Name</label>
+          <input
+            id="name"
+            formControlName="name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+            class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 dark:border-none dark:bg-zinc-800 dark:text-gray-200 sm:text-sm"
+            [ngClass]="
+              name?.touched && name?.invalid && firstSubmitted
+                ? 'border-red-700'
+                : 'border-gray-300'
+            "
+          />
+          <div
+            *ngIf="name?.touched && name?.invalid && firstSubmitted"
+            class="text-sm text-red-500"
+          >
+            You must enter a name
+          </div>
+        </div>
+        <div
+          *ngIf="serverMessage && serverMessage.text !== ''"
+          id="error-message"
+          class="mt-4 flex rounded-md p-4 text-sm"
+          role="alert"
+          [ngClass]="
+            serverMessage.type === 'warning'
+              ? 'bg-red-50 text-red-700'
+              : 'bg-blue-50 text-blue-700'
+          "
+        >
+          <ng-container *ngIf="serverMessage.type === 'warning'">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              class="mr-2 flex-none fill-red-700"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.00033 0.666626C13.602 0.666626 17.3337 4.39829 17.3337 8.99996C17.3337 13.6016 13.602 17.3333 9.00033 17.3333C4.39866 17.3333 0.666992 13.6016 0.666992 8.99996C0.666992 4.39829 4.39866 0.666626 9.00033 0.666626ZM10.9112 5.91079L9.00033 7.82163L7.08949 5.91079L5.91116 7.08913L7.82199 8.99996L5.91116 10.9108L7.08949 12.0891L9.00033 10.1783L10.9112 12.0891L12.0895 10.9108L10.1787 8.99996L12.0895 7.08913L10.9112 5.91079Z"
+              />
+            </svg>
+          </ng-container>
+          <ng-container *ngIf="serverMessage.type === 'info'">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              class="mr-2 flex-none fill-blue-700"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.16699 0.666687C7.48585 0.666687 5.84247 1.1652 4.44465 2.0992C3.04683 3.03319 1.95736 4.3607 1.31402 5.91388C0.670675 7.46705 0.502347 9.17611 0.830321 10.825C1.1583 12.4738 1.96784 13.9883 3.15659 15.1771C4.34533 16.3658 5.85989 17.1754 7.50873 17.5034C9.15757 17.8313 10.8666 17.663 12.4198 17.0197C13.973 16.3763 15.3005 15.2868 16.2345 13.889C17.1685 12.4912 17.667 10.8478 17.667 9.16669C17.667 8.05045 17.4471 6.94514 17.02 5.91388C16.5928 4.88261 15.9667 3.94558 15.1774 3.15628C14.3881 2.36698 13.4511 1.74088 12.4198 1.31371C11.3885 0.886546 10.2832 0.666687 9.16699 0.666687ZM10.017 13.4167C10.017 13.6421 9.92744 13.8583 9.76804 14.0177C9.60863 14.1771 9.39243 14.2667 9.16699 14.2667C8.94156 14.2667 8.72536 14.1771 8.56595 14.0177C8.40655 13.8583 8.31699 13.6421 8.31699 13.4167V8.31669C8.31699 8.09125 8.40655 7.87505 8.56595 7.71565C8.72536 7.55624 8.94156 7.46669 9.16699 7.46669C9.39243 7.46669 9.60863 7.55624 9.76804 7.71565C9.92744 7.87505 10.017 8.09125 10.017 8.31669V13.4167ZM9.16699 5.76669C8.91482 5.76669 8.66832 5.69191 8.45864 5.55181C8.24897 5.41171 8.08555 5.21258 7.98905 4.97961C7.89255 4.74663 7.8673 4.49027 7.91649 4.24295C7.96569 3.99562 8.08712 3.76844 8.26543 3.59013C8.44375 3.41181 8.67093 3.29038 8.91825 3.24119C9.16558 3.19199 9.42194 3.21724 9.65492 3.31374C9.88789 3.41024 10.087 3.57366 10.2271 3.78333C10.3672 3.99301 10.442 4.23952 10.442 4.49169C10.442 4.82984 10.3077 5.15414 10.0686 5.39325C9.82945 5.63236 9.50515 5.76669 9.16699 5.76669Z"
+              />
+            </svg>
+          </ng-container>
+          {{ serverMessage.text }}
+        </div>
+      </div>
+      <div>
+        <button
+          id="submit-button"
+          type="submit"
+          [disabled]="loading"
+          class="group relative mt-6 flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-white dark:text-black"
+        >
+          <ng-container *ngIf="type === 'signup'">Sign up</ng-container>
+          <ng-container *ngIf="type === 'login'">Log in</ng-container>
+          <ng-container *ngIf="type === 'password-reset'"
+            >Reset password</ng-container
+          >
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -17,21 +17,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/firebase-universal-test",
+            "outputPath": "dist/firebase-universal-test/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -82,21 +75,82 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "ssr": "cloud-functions",
+            "prerender": false,
+            "firebaseProject": "firebase-universal-test",
+            "firebaseHostingSite": "fir-universal-test",
+            "functionName": "ssrfirebaseuniversaltest",
+            "functionsNodeVersion": "16",
+            "region": "us-central1",
+            "browserTarget": "firebase-universal-test:build:production",
+            "serverTarget": "firebase-universal-test:server:production",
+            "prerenderTarget": "firebase-universal-test:prerender:production",
+            "outputPath": ".firebase/firebase-universal-test/functions"
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/firebase-universal-test/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "firebase-universal-test:build:development",
+              "serverTarget": "firebase-universal-test:server:development"
+            },
+            "production": {
+              "browserTarget": "firebase-universal-test:build:production",
+              "serverTarget": "firebase-universal-test:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": ["/"],
+            "guessRoutes": false
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "firebase-universal-test:build:production",
+              "serverTarget": "firebase-universal-test:server:production"
+            },
+            "development": {
+              "browserTarget": "firebase-universal-test:build:development",
+              "serverTarget": "firebase-universal-test:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

@@ -1,0 +1,27 @@
+<div *ngIf="afAuth.authState | async as user">
+  <div (click)="signOut()">{{ user.email }}</div>
+</div>
+<div *ngIf="itemsLoaded; else loading">
+  <ng-container *ngIf="itemsArray.length != 0; else noItems">
+    <ul>
+      <li *ngFor="let item of itemsArray">
+        <div>{{ item.key }}</div>
+        <div
+          (click)="
+            openDrawer({
+              key: item.key,
+              text: item.text,
+              user: item.user
+            })
+          "
+        >
+          {{ item.user }}
+        </div>
+        <div>{{ item.text }}</div>
+      </li>
+    </ul>
+  </ng-container>
+  <ng-template #noItems>Empty</ng-template>
+</div>
+<ng-template #loading>Loading</ng-template>
+<em *ngIf="thread">{{ thread.text }}</em>
