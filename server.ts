@@ -22,11 +22,14 @@ export function app(): express.Express {
     : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-  server.engine(
-    'html',
+  server.engine('html', (_: any, options: any, callback: any) =>
     ngExpressEngine({
       bootstrap: AppServerModule,
-    })
+      providers: [
+        { provide: REQUEST, useValue: options.req },
+        { provide: RESPONSE, useValue: options.req.res },
+      ],
+    })(_, options, callback)
   );
 
   server.set('view engine', 'html');
