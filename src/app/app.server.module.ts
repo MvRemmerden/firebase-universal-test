@@ -18,6 +18,8 @@ import { FIREBASE_ADMIN } from './app.module';
       provide: FIREBASE_ADMIN,
       useFactory: () => admin.apps[0] || admin.initializeApp(),
     },
+    { provide: REQUEST, useValue: {} },
+    { provide: RESPONSE, useValue: {} },
   ],
 })
 export class AppServerModule {
